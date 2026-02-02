@@ -36,15 +36,9 @@ class Program(models.Model):
     school = School()
     # program_profile
 
-class ProgramProfile(models.Model):
-    # degree
-    # schedule
-    tuition = 0.0
-    # dorm_requirement
-    # dorm_availability
-    acceptance_rate = 0.0
-    esl_support = False
-    school = School()
+
+
+
 
 class Degree(models.Model):
     # level
@@ -63,6 +57,37 @@ class DegreeLevel(Enum):
     DNP = 8
     PHD = 9
 
+class ProgramFormat(Enum):
+    TRADITIONAL = 1
+    ACCELERATED = 2
+    BRIDGE = 3
+    POST_BACC = 4
+    N_A = 5
+
+class DegreeSpecialty(Enum):
+    ADULT_GERON_ACUTE = 1
+    ADULT_GERON_PRIM = 2
+    ADULT_GERON_CLIN_SPEC = 3
+    FAMILY_NP = 4
+    HEALTH_IT = 5
+    MIDWIFERY = 6
+    NURSING_ADMIN_LEAD = 7
+    NURSE_EDU = 8
+    PED_CLIN_SPEC = 9
+    PED_ACU_NP = 10
+    PSYCH_NP = 11
+    WOMENS_HEALTH_NP = 12
+    TRANSCULTURAL = 13
+    INNOVATIONS = 14
+    INTEG_HEALING = 15
+    NEONAT_NP = 16
+    NURSE_ANESTH = 17
+    PUBLIC_HEALTH = 18
+    NURSING_PROMOTION = 19
+    CHRONIC_COND_PREV = 20
+    POP_HEALTH = 21
+    SYMPT_MANAGEMENT = 22
+    NONE = 23
 
 class ScheduleType(Enum):
     PART_TIME = 1
@@ -76,3 +101,13 @@ class DormAvailability(Enum):
     AVAILABLE = 1
     LIMITED = 2
     UNAVAILABLE = 3
+
+class ProgramProfile(models.Model):
+    # degree
+    # schedule
+    tuition = 0.0
+    dorm_requirement = DormRequirement.OPTIONAL
+    dorm_availability = DormAvailability.UNAVAILABLE
+    acceptance_rate = 0.0
+    esl_support = False
+    school = School()
