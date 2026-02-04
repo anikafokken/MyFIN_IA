@@ -3,6 +3,8 @@
 import os
 import sys
 import django
+import pandas
+
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'web_project.settings')
 django.setup()
 
