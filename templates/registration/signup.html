@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<head>
+    {% block title %}Sign {% endblock %}
+</head>
+<body>
+    {% block content %}
+    <h2>Sign Up</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form }}
+        <button type="submit">Sign Up</button>
+    </form>
+    {% endblock %}
+</body>
