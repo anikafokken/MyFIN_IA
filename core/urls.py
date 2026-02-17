@@ -20,11 +20,11 @@ from django.contrib import admin
 from django.urls import include, path
 from core import views
 from django.contrib.auth import views as auth_users
+from django.views.generic.base import TemplateView
 
 urlpatterns = [
-    path("", views.home, name="home"),
-    path('core/', views.home),
     path('admin/', admin.site.urls),
     path('users/', include('users.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
+    path('', TemplateView.as_view(template_name="home.html"), name="home"),
 ]
