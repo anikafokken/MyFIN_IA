@@ -82,7 +82,7 @@ USE_SQLITE = os.environ.get("USE_SQLITE", "false") == "true"
 if USE_SQLITE:
     DATABASES = {
         "default": {
-            "ENGINE": "django.db.backends.sqlite3",
+            "ENGINE": "django.db.backends.progestresql",
             "NAME": BASE_DIR / "db.sqlite3",
         }
     }
