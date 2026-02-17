@@ -2,11 +2,14 @@ from django.db import models
 
 # Create your models here.
 
+from core.constants import DegreeLevel
+from core.constants import DegreeSpecialty
+from core.constants import ProgramFormat
+
 class Degree(models.Model):
     level = models.IntegerField(choices=DegreeLevel.choices, default=DegreeLevel.NONE)
     specialty = models.IntegerField(choices=DegreeSpecialty.choices, default=DegreeSpecialty.NONE)
     format = models.IntegerField(choices=ProgramFormat.choices, default=ProgramFormat.NONE)
-    id = 0
     name = ""
 
 
@@ -27,7 +30,6 @@ class DormAvailability(models.IntegerChoices):
     UNAVAILABLE = 3
 
 class ProgramProfile(models.Model):
-    program_id = models.IntegerField(default=0)
     degree = Degree()
     schedule = models.IntegerField(choices=ScheduleType.choices, default=ScheduleType.NONE)
     tuition = models.FloatField(default=0.0)
@@ -35,7 +37,7 @@ class ProgramProfile(models.Model):
     dorm_availability = models.IntegerField(choices=DormAvailability.choices, default=DormAvailability.NONE)
     acceptance_rate = models.BooleanField(default=False)
     esl_support = models.BooleanField(default=False)
-    school = models.ForeignKey('School', on_delete=models.CASCADE)
+    school = models.ForeignKey('users.School', on_delete=models.CASCADE)
     # def __init__(self, degree, schedule, tuition, dorm_requirement, dorm_availability, acceptance_rate, esl_support, school, program_id):
     #     self.degree = degree
     #     self.schedule = schedule
@@ -78,12 +80,11 @@ class ProgramProfile(models.Model):
         return self.school
 
 class Program(models.Model):
-    id = models.IntegerField(default=0)
     name = models.CharField(max_length=255, blank=True)
     approval_status = models.BooleanField(default=False)
     matched_students = models.JSONField(default=list)
-    school = models.ForeignKey('School', on_delete=models.CASCADE)
-    program_profile = ProgramProfile()
+    school = models.ForeignKey('users.School', on_delete=models.CASCADE)
+    program_profile = models.ForeignKey('ProgramProfile', on_delete=models.CASCADE)
 
     # def __init__(self, name, id, school, program_profile):
     #     self.name = name

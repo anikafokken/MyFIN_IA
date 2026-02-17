@@ -9,7 +9,6 @@ from core.constants import DegreeLevel
     
 class School(models.Model):
     name = models.CharField(max_length=255, blank=True)
-    id = models.IntegerField(default=0)
     is_private = models.BooleanField(default=False)
     program_list = models.JSONField(default=list)
     # location
@@ -22,8 +21,8 @@ class School(models.Model):
     def __str__(self):
         return f"{self.name}, ID {self.id}"
 
-    def add_program(self, program):
-        self.program_list.append(program)
+    # def add_program(self, program):
+    #     return
 
 class Location(models.Model):
     coordinates = models.JSONField(default=tuple)
@@ -31,16 +30,17 @@ class Location(models.Model):
     # def __init__(self, coordinates):
     #     self.coordiantes = coordinates
 
-    def get_city_info(coordinates):
-        latitude = coordinates[0]
-        longitude = coordinates[1]
+    def get_city_info(self, address):
 
         geolocator = Nominatim(user_agent="MyFIN_IA")
-        location = geolocator.geocode("1015 Snelling Ave S Saint Paul, 55116")
-        print(location.address)
+        location = geolocator.geocode(address)
+        if location:
+            print(location)
+            return location
+        else:
+            print("Location not found")
 
 class Student(models.Model):
-    id = models.IntegerField(default=0)
     name = models.CharField(max_length=255, blank=True)
     desired_program_types = models.JSONField(default=list) # may need to change to ArrayField when adding in ProgestreSQL, list of Degree Specialties
     # constraints
