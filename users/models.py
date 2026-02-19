@@ -2,10 +2,14 @@ from enum import Enum
 from django.db import models
 import sys
 print(sys.executable)
+from django.dispatch import receiver
+from django.db.models.signals import post_save
 import geopy
 from geopy.geocoders import Nominatim
 
 from core.constants import DegreeLevel
+
+from django.contrib.auth.models import User
     
 class School(models.Model):
     name = models.CharField(max_length=255, blank=True)
@@ -41,6 +45,7 @@ class Location(models.Model):
             print("Location not found")
 
 class Student(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, default=0)
     name = models.CharField(max_length=255, blank=True)
     desired_program_types = models.JSONField(default=list) # may need to change to ArrayField when adding in ProgestreSQL, list of Degree Specialties
     # constraints
@@ -83,3 +88,9 @@ class MatchManager(models.Model):
 
     def get_success_rate():
         return 0
+
+# prevent crashing
+@receiver(post_save, sender=User) # watchs for changes in database, especially after a save
+def manage_student_profile(sender, instance, created, **kwargs):
+    if created:
+        Student.objects.create(user=instance)

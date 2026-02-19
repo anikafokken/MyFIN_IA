@@ -82,7 +82,7 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
-USE_SQLITE = os.environ.get("USE_SQLITE", "true") == "true"
+USE_SQLITE = os.environ.get("USE_SQLITE", "false") == "true"
 
 if USE_SQLITE:
     DATABASES = {
