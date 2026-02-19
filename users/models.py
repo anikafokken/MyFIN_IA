@@ -89,8 +89,17 @@ class MatchManager(models.Model):
     def get_success_rate():
         return 0
 
+class CustomUser(models.Model):
+    class Role(models.TextChoices):
+        STUDENT = "STUDENT"
+        SCHOOL = "SCHOOL"
+        ADMIN = "ADMIN"
+
+    role = models.CharField(max_length=10, choices=Role.choices, default=Role.STUDENT)
+
 # prevent crashing
-@receiver(post_save, sender=User) # watchs for changes in database, especially after a save
+@receiver(post_save, sender=CustomUser) # watchs for changes in database, especially after a save
 def manage_student_profile(sender, instance, created, **kwargs):
     if created:
         Student.objects.create(user=instance)
+
