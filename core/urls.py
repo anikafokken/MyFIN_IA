@@ -21,10 +21,15 @@ from django.urls import include, path
 from core import views
 from django.contrib.auth import views as auth_users
 from django.views.generic.base import TemplateView
+import portal.views
+from .views import portal_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('users/', include('users.urls')),
     path('accounts/', include('accounts.urls')),
     path('', TemplateView.as_view(template_name="home.html"), name="home"),
+    path('portal/', portal_view, name="portal"),
+    path('portal/student_portal', portal.views.student_portal, name="student_portal")
 ]
+

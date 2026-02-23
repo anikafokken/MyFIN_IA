@@ -1,12 +1,23 @@
 <!doctype html>
 <head>
-  {% block title %}Sign {% endblock %}
+  {% block title %}Sign {% endblock %} {% load static %}
+  <script src="{% static 'js/form_handler.js' %}"></script>
 </head>
 <body>
   {% block content %}
   <h2>Sign Up</h2>
   <form method="post">
-    {% csrf_token %} {{ form }}
+    {% csrf_token %} {{ form.username }}
+
+    <div class="field-wrapper">{{ form.account_type }}</div>
+    <div id="student-only-fields" class="toggle-section" style="display: none">
+      {{ form.first_name.label_tag }} {{ form.first_name }}
+      {{form.last_name.label_tag }} {{ form.last_name }}
+    </div>
+    <div id="school-fields" class="toggle-section" style="display: none">
+      {{ form.school_name.label_tag }} {{ form.school_name }}
+    </div>
+    <button type="submit">Sign Up</button>
   </form>
   {% endblock %}
 </body>

@@ -9,7 +9,6 @@ from geopy.geocoders import Nominatim
 from django.contrib.auth.models import AbstractUser
 from django.conf import settings
 from django.utils import timezone
-from core.constants import Location
 import abc
 
 from core.constants import DegreeLevel
@@ -24,13 +23,17 @@ class CustomUser(AbstractUser):
         SCHOOL = "SCHOOL"
         ADMIN = "ADMIN"
         
+    FIRST_NAME_FIELD = "first_name"
+    LAST_NAME_FIELD = "last_name"
     USERNAME_FIELD = "username"
     EMAIL_FIELD = "email"
+    SCHOOL_NAME_FIELD = "school_name"
+    ADMIN_CODE_FIELD = "admin_code"
     account_type = models.CharField(
         max_length=20,
         choices=AccountType.choices, 
         default=AccountType.STUDENT)
-    REQUIRED_FIELDS = ["email", "account_type"]
+    REQUIRED_FIELDS = ["first_name", "last_name", "email", "account_type"]
 
     date_created = models.DateTimeField(auto_now_add=True, null=True)
 
@@ -58,15 +61,31 @@ class School(models.Model):
 class Factor(models.Model):
     program_attribute = models.JSONField()
     scoring_weight = models.FloatField(default=0)
-    constraint_options = models.TextChoices(HARD = "HARD", SOFT = "SOFT")
-    constraint_type = models.CharField(max_length=10, choices=constraint_options.choices, default="SOFT")
+    class ConstraintType(models.TextChoices):
+        HARD = "HARD"
+        SOFT = "SOFT"
+    constraint_type = models.CharField(max_length=10, choices=ConstraintType.choices, default="SOFT")
     
     def set_scoring_weight(self):
         # get weights data from database
         weights = Factor.objects.all() # probably not right
         
 
+class Location(models.Model):
+    coordinates = models.JSONField(default=tuple)
 
+    # def __init__(self, coordinates):
+    #     self.coordiantes = coordinates
+
+    def get_city_info(self, address):
+
+        geolocator = Nominatim(user_agent="MyFIN_IA")
+        location = geolocator.geocode(address)
+        if location:
+            print(location)
+            return location
+        else:
+            print("Location not found")
 
 class Student(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default=0)

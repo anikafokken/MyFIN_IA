@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 from users.models import CustomUser
+from users.models import Location
 
 User = settings.AUTH_USER_MODEL
 # Create your models here.

@@ -77,7 +77,8 @@ TEMPLATES = [
 ]
 
 
-LOGIN_REDIRECT_URL = "home"
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = "/portal/"
 LOGOUT_REDIRECT_URL = "home"
 
 WSGI_APPLICATION = 'core.wsgi.application'

@@ -1,12 +1,17 @@
 from django import forms
 from django.db import models
+from users.models import CustomUser
+from django.contrib.auth.forms import UserCreationForm
 
-class SignUpForm(forms.ModelForm):
+class SignUpForm(UserCreationForm):
     class Meta:
-        username = models.CharField(max_length=20)
-        password = models.CharField(max_length=40)
-        email = models.EmailField()
-        CHOICES = (('Student', 'School', 'Admin'))
-        account_type = forms.ChoiceField(choices=CHOICES)
+        model = CustomUser
+        fields = CustomUser.REQUIRED_FIELDS
+        widgets = { # create forms dependent on user account type
+            'first_name': forms.TextInput(attrs={'class': 'dependent-field student-only'}),
+            'last_name': forms.TextInput(attrs={'class': 'dependent-field student-only'}),
+            'school_name': forms.TextInput(attrs={'class': 'dependent-field school-only'}),
+            'admin_code': forms.TextInput(attrs={'class': 'dependent-field admin-only'}),
+        }
 
 print(SignUpForm.as_p) # render as elements
