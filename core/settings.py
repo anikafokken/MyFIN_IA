@@ -17,6 +17,8 @@ import os;
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+AUTH_USER_MODEL = 'users.CustomUser'
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
@@ -43,6 +45,8 @@ INSTALLED_APPS = [
     'users',
     'programs',
     'accounts',
+    'portal',
+    
 ]
 
 MIDDLEWARE = [
@@ -97,7 +101,7 @@ else:
             'ENGINE': 'django.db.backends.postgresql',
             'NAME': 'myfin_test',
             'USER': 'myfin_user',
-            'PASSWORD': 'test_myfin',
+            'PASSWORD': 'test123',
             'HOST': 'localhost',
             'PORT': '5432',
         }
@@ -123,7 +127,6 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-AUTH_USER_MODEL = 'users.CustomUser'
 
 # Internationalization
 # https://docs.djangoproject.com/en/6.0/topics/i18n/

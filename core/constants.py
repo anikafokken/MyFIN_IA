@@ -1,4 +1,5 @@
 from django.db import models
+from geopy import Nominatim
 
 
 class DegreeLevel(models.IntegerChoices):
@@ -45,3 +46,19 @@ class DegreeSpecialty(models.IntegerChoices):
     CHRONIC_COND_PREV = 20
     POP_HEALTH = 21
     SYMPT_MANAGEMENT = 22
+
+class Location(models.Model):
+    coordinates = models.JSONField(default=tuple)
+
+    # def __init__(self, coordinates):
+    #     self.coordiantes = coordinates
+
+    def get_city_info(self, address):
+
+        geolocator = Nominatim(user_agent="MyFIN_IA")
+        location = geolocator.geocode(address)
+        if location:
+            print(location)
+            return location
+        else:
+            print("Location not found")

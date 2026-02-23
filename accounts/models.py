@@ -1,6 +1,8 @@
 from django.db import models
 from django.conf import settings
+from users.models import CustomUser
 
+User = settings.AUTH_USER_MODEL
 # Create your models here.
 
 class StudentProfile(models.Model):
@@ -14,3 +16,6 @@ class SchoolProfile(models.Model):
     location = models.ForeignKey('users.Location', on_delete=models.CASCADE)
     school_name = models.CharField(max_length=255)
     application_website = models.URLField()
+
+class Account(models.Model):
+    pass

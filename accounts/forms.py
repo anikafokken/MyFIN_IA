@@ -9,4 +9,4 @@ class SignUpForm(forms.ModelForm):
         CHOICES = (('Student', 'School', 'Admin'))
         account_type = forms.ChoiceField(choices=CHOICES)
 
-print(SignUpForm.as_p()) # render as elements
+print(SignUpForm.as_p) # render as elements

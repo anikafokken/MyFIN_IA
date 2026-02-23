@@ -6,11 +6,37 @@ from django.dispatch import receiver
 from django.db.models.signals import post_save
 import geopy
 from geopy.geocoders import Nominatim
+from django.contrib.auth.models import AbstractUser
+from django.conf import settings
+from django.utils import timezone
+from core.constants import Location
+import abc
 
 from core.constants import DegreeLevel
 
-from django.contrib.auth.models import User
+class AbstractModelMeta(abc.ABCMeta, type(models.Model)):
+    pass
+
     
+class CustomUser(AbstractUser):
+    class AccountType(models.TextChoices):
+        STUDENT = "STUDENT"
+        SCHOOL = "SCHOOL"
+        ADMIN = "ADMIN"
+        
+    USERNAME_FIELD = "username"
+    EMAIL_FIELD = "email"
+    account_type = models.CharField(
+        max_length=20,
+        choices=AccountType.choices, 
+        default=AccountType.STUDENT)
+    REQUIRED_FIELDS = ["email", "account_type"]
+
+    date_created = models.DateTimeField(auto_now_add=True, null=True)
+
+    def __str__(self):
+        return f"{self.username}, {self.account_type}"
+
 class School(models.Model):
     name = models.CharField(max_length=255, blank=True)
     is_private = models.BooleanField(default=False)
@@ -28,24 +54,22 @@ class School(models.Model):
     # def add_program(self, program):
     #     return
 
-class Location(models.Model):
-    coordinates = models.JSONField(default=tuple)
 
-    # def __init__(self, coordinates):
-    #     self.coordiantes = coordinates
+class Factor(models.Model):
+    program_attribute = models.JSONField()
+    scoring_weight = models.FloatField(default=0)
+    constraint_options = models.TextChoices(HARD = "HARD", SOFT = "SOFT")
+    constraint_type = models.CharField(max_length=10, choices=constraint_options.choices, default="SOFT")
+    
+    def set_scoring_weight(self):
+        # get weights data from database
+        weights = Factor.objects.all() # probably not right
+        
 
-    def get_city_info(self, address):
 
-        geolocator = Nominatim(user_agent="MyFIN_IA")
-        location = geolocator.geocode(address)
-        if location:
-            print(location)
-            return location
-        else:
-            print("Location not found")
 
 class Student(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, default=0)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default=0)
     name = models.CharField(max_length=255, blank=True)
     desired_program_types = models.JSONField(default=list) # may need to change to ArrayField when adding in ProgestreSQL, list of Degree Specialties
     # constraints
@@ -89,16 +113,9 @@ class MatchManager(models.Model):
     def get_success_rate():
         return 0
 
-class CustomUser(models.Model):
-    class Role(models.TextChoices):
-        STUDENT = "STUDENT"
-        SCHOOL = "SCHOOL"
-        ADMIN = "ADMIN"
-
-    role = models.CharField(max_length=10, choices=Role.choices, default=Role.STUDENT)
 
 # prevent crashing
-@receiver(post_save, sender=CustomUser) # watchs for changes in database, especially after a save
+@receiver(post_save, sender=settings.AUTH_USER_MODEL) # watchs for changes in database, especially after a save
 def manage_student_profile(sender, instance, created, **kwargs):
     if created:
         Student.objects.create(user=instance)
