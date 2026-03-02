@@ -1,0 +1,50 @@
+<div class="results-layout">
+  <!-- LEFT: Matches -->
+  <main class="match-column">
+    <h2>Your Matches</h2>
+
+    {% for program in programs %}
+    <div class="match-card">
+      <div class="card-header">
+        <h3>{{ program.school.name }}</h3>
+        <span class="score">{{ program.match_score|floatformat:2 }}</span>
+      </div>
+
+      <div class="card-body">
+        <p><strong>Program:</strong> {{ program.name }}</p>
+        <p><strong>Tuition:</strong> ${{ program.tuition }}</p>
+        <p><strong>Acceptance Rate:</strong> {{ program.acceptance_rate }}%</p>
+        <p><strong>Distance:</strong> {{ program.distance }} miles</p>
+      </div>
+
+      <div class="card-actions">
+        <button class="primary">View Details</button>
+        <button class="secondary">Save</button>
+      </div>
+    </div>
+    {% empty %}
+    <p>No matches yet.</p>
+    {% endfor %}
+  </main>
+
+  <!-- RIGHT: Ads / Sponsored -->
+  <aside class="ads-column">
+    <h3>Sponsored Programs</h3>
+
+    <div class="ad-card">
+      <h4>Johns Hopkins Nursing</h4>
+      <p>Top-ranked BSN program</p>
+      <button>Learn More</button>
+    </div>
+
+    <div class="ad-card">
+      <h4>Mayo Clinic School</h4>
+      <p>100% clinical placement rate</p>
+      <button>Explore</button>
+    </div>
+
+    <div class="ad-banner">
+      <p>Ad Space</p>
+    </div>
+  </aside>
+</div>

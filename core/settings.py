@@ -77,8 +77,17 @@ TEMPLATES = [
 ]
 
 
+AUTH_PASSWORD_VALIDATORS = [
+    {
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+            'OPTIONS': {
+                'min_length': 0,
+            }
+    }
+]
+
 LOGIN_URL = 'login'
-LOGIN_REDIRECT_URL = "/portal/"
+LOGIN_REDIRECT_URL = "portal_view"
 LOGOUT_REDIRECT_URL = "home"
 
 WSGI_APPLICATION = 'core.wsgi.application'

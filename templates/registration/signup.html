@@ -1,23 +1,99 @@
 <!doctype html>
 <head>
-  {% block title %}Sign {% endblock %} {% load static %}
-  <script src="{% static 'js/form_handler.js' %}"></script>
+  <!-- {% block title %}Sign {% endblock %} {% load static %} -->
 </head>
 <body>
-  {% block content %}
+  <!-- {% block content %} -->
   <h2>Sign Up</h2>
-  <form method="post">
-    {% csrf_token %} {{ form.username }}
-
-    <div class="field-wrapper">{{ form.account_type }}</div>
-    <div id="student-only-fields" class="toggle-section" style="display: none">
-      {{ form.first_name.label_tag }} {{ form.first_name }}
+  <form method="POST" novalidate>
+    {% csrf_token %}
+    <div id="account-type-wrapper" class="field-wrapper">
+      {{ form.account_type }} {{ form.username.label_tag }} {{ form.username }}
+    </div>
+    <div id="student-only-fields" class="toggle-section" style="display: block">
+      {{form.first_name.label_tag }} {{ form.first_name }}
       {{form.last_name.label_tag }} {{ form.last_name }}
+      {{form.email.label_tag}} {{ form.email }}
     </div>
     <div id="school-fields" class="toggle-section" style="display: none">
       {{ form.school_name.label_tag }} {{ form.school_name }}
     </div>
+    {{form.password1.label_tag }} {{ form.password1 }}
+    {{form.password2.label_tag }} {{ form.password2 }} {{form.errors }}
     <button type="submit">Sign Up</button>
   </form>
-  {% endblock %}
+  <!-- src="{% static 'js/form_handler.js' %}" -->
+  <!-- <script>
+    console.log("Template script is running!");
+    window.onload = function () {
+      console.log("Script execution started.");
+      const typeField = document.querySelector("#account-type-wrapper");
+      const studentSelection = document.querySelector("#student-only-fields");
+      const schoolSelection = document.querySelector("#school-fields");
+
+      if (typeField) {
+        console.log("Dropdown found! ID is:", typeField.id);
+        typefield.onchange = function () {
+          const account_type_value = typeField.value;
+          console.log("ACTUAL value: ", account_type_value);
+
+          studentSelection.style.display = "none";
+          schoolSelection.style.display = "none";
+
+          if (account_type_value == "STUDENT") {
+            console.log("Showing student section");
+            studentSelection.style.display = "block";
+            schoolSelection.style.display = "none";
+          } else if (account_type_value == "SCHOOL") {
+            console.log("Showing school section");
+            schoolSelection.style.display = "block";
+            studentSelection.style.display = "none";
+          }
+        };
+        typeField.onchange();
+      } else {
+        console.error("Could not find the select element. Check your HTML IDs");
+      }
+    };
+  </script> -->
+  <script>
+    console.log("Script block is being read by the browser.");
+
+    window.onload = function () {
+      console.log("Window has finished loading.");
+
+      // We use 'id_account_type' because that is Django's default
+      const typeField = document.getElementById("id_account_type");
+      const studentDiv = document.getElementById("student-only-fields");
+      const schoolDiv = document.getElementById("school-fields");
+      const adminDiv = document.getElementById("admin-fields");
+
+      if (typeField) {
+        console.log("Found the dropdown! Initial value is:", typeField.value);
+
+        // This function handles the actual showing and hiding
+        const updater = function () {
+          const val = typeField.value;
+          console.log("Selection changed to:", val);
+
+          // Use 'none' to hide, 'block' to show
+          studentDiv.style.display = val === "STUDENT" ? "block" : "none";
+          schoolDiv.style.display = val === "SCHOOL" ? "block" : "none";
+          adminDiv.style.display = val === "ADMIN" ? "block" : "none";
+        };
+
+        // Attach the listener
+        typeField.onchange = updater;
+
+        // Run it once immediately so the page looks right on load
+        updater();
+      } else {
+        console.error(
+          "Could not find #id_account_type. Check your Page Source (Ctrl+U)",
+        );
+      }
+    };
+  </script>
+
+  <!-- {% endblock %} -->
 </body>

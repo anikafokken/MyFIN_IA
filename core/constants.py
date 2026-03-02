@@ -2,6 +2,11 @@ from django.db import models
 from geopy import Nominatim
 
 
+class ScheduleType(models.IntegerChoices):
+    NONE = 0
+    PART_TIME = 1
+    FULL_TIME = 2
+
 class DegreeLevel(models.IntegerChoices):
     NONE = 0
     PRACTICAL_NURSING = 1
@@ -47,3 +52,19 @@ class DegreeSpecialty(models.IntegerChoices):
     POP_HEALTH = 21
     SYMPT_MANAGEMENT = 22
 
+class ESLSupportAvailability(models.IntegerChoices):
+    NONE = 0
+    UNAVAILABLE = 1
+    AVAILABLE = 2
+
+class DormRequirement(models.IntegerChoices):
+    NONE = 0
+    REQUIRED = 1
+    OPTIONAL = 2
+    NOT_REQUIRED = 3
+
+class DormAvailability(models.IntegerChoices):
+    NONE = 0
+    AVAILABLE = 1
+    LIMITED = 2
+    UNAVAILABLE = 3

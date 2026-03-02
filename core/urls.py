@@ -29,7 +29,7 @@ urlpatterns = [
     path('users/', include('users.urls')),
     path('accounts/', include('accounts.urls')),
     path('', TemplateView.as_view(template_name="home.html"), name="home"),
-    path('portal/', portal_view, name="portal"),
-    path('portal/student_portal', portal.views.student_portal, name="student_portal")
+    path('portal/', include('portal.urls')),
+    path('portal_view/', portal_view, name='portal_view')
 ]
 

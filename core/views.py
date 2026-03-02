@@ -19,6 +19,8 @@ def portal_view(request: HttpRequest, *args, **kwargs):
         return redirect('student_portal')
     elif request.user.account_type == "SCHOOL":
         print(request.user.account_type)
+        return redirect('school_portal')
     elif request.user.account_type == "ADMIN":
         print(request.user.account_type)
+        return redirect('admin_portal')
     return HttpResponse(f"Here: {request}")

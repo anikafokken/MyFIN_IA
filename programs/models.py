@@ -5,6 +5,7 @@ from django.db import models
 from core.constants import DegreeLevel
 from core.constants import DegreeSpecialty
 from core.constants import ProgramFormat
+from core import constants
 
 class Degree(models.Model):
     level = models.IntegerField(choices=DegreeLevel.choices, default=DegreeLevel.NONE)
@@ -85,12 +86,13 @@ class Program(models.Model):
     matched_students = models.JSONField(default=list)
     school = models.ForeignKey('users.School', on_delete=models.CASCADE)
     program_profile = models.ForeignKey('ProgramProfile', on_delete=models.CASCADE)
-
-    # def __init__(self, name, id, school, program_profile):
-    #     self.name = name
-    #     self.id = id
-    #     self.school = school
-    #     self.program_profile = program_profile
+    tuition = models.DecimalField(max_digits=12, decimal_places=2, blank=True)
+    degree_level = models.IntegerField(choices=constants.DegreeLevel)
+    schedule_type = models.IntegerField(choices=constants.ScheduleType)
+    degree_specialty = models.IntegerField(choices=constants.DegreeSpecialty)
+    esl_support = models.IntegerField(choices=constants.ESLSupportAvailability)
+    dorm_requirement = models.IntegerField(choices=constants.DormRequirement)
+    dorm_availability = models.IntegerField(choices=constants.DormAvailability)
 
     def __str__(self):
         return (f"{self.name} at {self.school}, ID {self.id}\nApproved: {self.approval_status}")

@@ -11,11 +11,11 @@ from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
-
 class SignUpView(CreateView):
     form_class = forms.SignUpForm
-    success_url = reverse_lazy("login") # redirect users after registration to login
+    success_url = reverse_lazy('portal_view') # redirect users after registration to login
     template_name = "registration/signup.html"
+
 
 class LoginViews(views_auth.LoginView):
     # redirect_authenticated_user = True
@@ -23,7 +23,7 @@ class LoginViews(views_auth.LoginView):
     def get_success_url(self):
         print(type(self.request.user))
         if self.request.user.is_active:
-            return reverse('portal/student_portal')
+            return reverse('portal_view')
         return '/'
 
 
